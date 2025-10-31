@@ -22,6 +22,7 @@ export class BookDetailPage implements OnInit {
       this.booksApi.getBook(id).subscribe((b) => (this.book = b));
     }
   }
+
 }
 
 

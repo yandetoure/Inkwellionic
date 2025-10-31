@@ -16,7 +16,7 @@
   <ion-grid>
     <ion-row>
       <ion-col size="12" size-md="6" size-lg="4" *ngFor="let b of books">
-        <ion-card>
+        <ion-card [routerLink]="['/tabs/book', b.id]">
           <ion-img *ngIf="b.cover" [src]="b.cover" alt="cover"></ion-img>
           <ion-card-header>
             <ion-card-title>{{ b.title || ('Livre #' + b.id) }}</ion-card-title>
@@ -26,11 +26,9 @@
             <ion-chip *ngIf="b.category" color="primary" outline>
               <ion-label>{{ b.category }}</ion-label>
             </ion-chip>
-            <div style="display:flex; gap:8px; margin-top:12px; align-items:center;">
-              <ion-button size="small" (click)="onReadClick(b)">{{ getActionLabel(b.id) }}</ion-button>
-              <ion-button size="small" fill="clear" (click)="onAddToList(b)">
-                <ion-icon slot="icon-only" name="bookmark"></ion-icon>
-              </ion-button>
+            <div style="display:flex; gap:12px; margin-top:8px; align-items:center;">
+              <ion-text><ion-icon name="eye-outline"></ion-icon> {{ getViews(b) }}</ion-text>
+              <ion-text *ngIf="b.total_likes !== undefined"><ion-icon name="heart-outline"></ion-icon> {{ b.total_likes }}</ion-text>
             </div>
           </ion-card-content>
         </ion-card>

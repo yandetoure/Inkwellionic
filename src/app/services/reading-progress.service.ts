@@ -1,49 +1,44 @@
 import { Injectable } from '@angular/core';
 
-interface StoredProgress {
-  [bookId: string]: {
-    chapterId: string;
-    chapterNumber?: number;
-    updatedAt: number;
-  };
+export interface BookProgress {
+  chapterId?: string | number;
+  chapterNumber?: number;
+  updatedAt: number;
 }
+
+type ProgressMap = Record<string | number, BookProgress>;
+
+const STORAGE_KEY = 'reading_progress_v1';
 
 @Injectable({ providedIn: 'root' })
 export class ReadingProgressService {
-  private readonly storageKey = 'readingProgress:v1';
-
-  private readAll(): StoredProgress {
+  private readStorage(): ProgressMap {
     try {
-      const raw = localStorage.getItem(this.storageKey);
-      return raw ? JSON.parse(raw) : {};
+      const raw = localStorage.getItem(STORAGE_KEY);
+      return raw ? (JSON.parse(raw) as ProgressMap) : {};
     } catch {
       return {};
     }
   }
 
-  private writeAll(all: StoredProgress): void {
-    localStorage.setItem(this.storageKey, JSON.stringify(all));
-  }
-
-  getProgress(bookId: string | number): { chapterId: string; chapterNumber?: number } | null {
-    const all = this.readAll();
-    const key = String(bookId);
-    const entry = all[key];
-    return entry ? { chapterId: entry.chapterId, chapterNumber: entry.chapterNumber } : null;
+  private writeStorage(map: ProgressMap): void {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
   }
 
   hasProgress(bookId: string | number): boolean {
-    return !!this.getProgress(bookId);
+    const map = this.readStorage();
+    return !!map[bookId];
   }
 
-  setProgress(bookId: string | number, chapterId: string | number, chapterNumber?: number): void {
-    const all = this.readAll();
-    all[String(bookId)] = {
-      chapterId: String(chapterId),
-      chapterNumber,
-      updatedAt: Date.now(),
-    };
-    this.writeAll(all);
+  getProgress(bookId: string | number): BookProgress | undefined {
+    const map = this.readStorage();
+    return map[bookId];
+  }
+
+  setProgress(bookId: string | number, chapterId?: string | number, chapterNumber?: number): void {
+    const map = this.readStorage();
+    map[bookId] = { chapterId, chapterNumber, updatedAt: Date.now() };
+    this.writeStorage(map);
   }
 }
 
