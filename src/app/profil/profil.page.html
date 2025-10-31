@@ -1,0 +1,32 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Profil
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Profil</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-card *ngIf="me as user">
+    <ion-item lines="none">
+      <ion-avatar slot="start">
+        <img [src]="user.avatar" alt="avatar" />
+      </ion-avatar>
+      <ion-label>
+        <h2>{{ user.name }}</h2>
+        <p>Pièces: {{ user.coins || 0 }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-card-content>
+      <p>Livres écrits: {{ user.booksWritten || 0 }}</p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+
