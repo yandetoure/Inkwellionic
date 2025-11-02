@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab3"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ list?.name || 'Liste de lecture' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">{{ list?.name || 'Liste de lecture' }}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div *ngIf="loading" style="display: flex; justify-content: center; align-items: center; height: 50vh;">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <div *ngIf="!loading && books.length === 0" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; min-height: 50vh;">
+    <ion-icon name="book-outline" style="font-size: 64px; color: #999; margin-bottom: 16px;"></ion-icon>
+    <ion-text color="medium">
+      <h2>Aucun livre dans cette liste</h2>
+      <p>Ajoutez des livres à cette liste de lecture pour les voir ici</p>
+    </ion-text>
+  </div>
+
+  <div *ngIf="!loading && books.length > 0" style="padding: 16px;">
+    <ion-text>
+      <p style="margin-bottom: 16px; color: #666;">
+        {{ books.length }} livre{{ books.length > 1 ? 's' : '' }} dans cette liste
+      </p>
+    </ion-text>
+    
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px;">
+      <ion-card button *ngFor="let book of books" (click)="openBook(book.id)" style="margin: 0;">
+        <ion-img *ngIf="book.cover" [src]="book.cover" [alt]="book.title" style="height: 200px; object-fit: cover;"></ion-img>
+        <ion-img *ngIf="!book.cover" src="assets/icon/book-placeholder.png" [alt]="book.title" style="height: 200px; object-fit: cover; background: #f0f0f0;"></ion-img>
+        <ion-card-header>
+          <ion-card-title style="font-size: 14px; margin: 0;">{{ book.title }}</ion-card-title>
+          <ion-card-subtitle *ngIf="book.author" style="font-size: 12px; margin-top: 4px;">{{ book.author }}</ion-card-subtitle>
+        </ion-card-header>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>
+

@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Liste de lecture
+      Listes de lecture
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +9,29 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Liste de lecture</ion-title>
+      <ion-title size="large">Listes de lecture</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Page Liste de lecture"></app-explore-container>
+  <div *ngIf="lists.length === 0" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; height: 100%;">
+    <ion-icon name="bookmark-outline" style="font-size: 64px; color: #999; margin-bottom: 16px;"></ion-icon>
+    <ion-text color="medium">
+      <h2>Aucune liste de lecture</h2>
+      <p>Créez une liste de lecture pour commencer à organiser vos livres favoris</p>
+    </ion-text>
+  </div>
+
+  <ion-list *ngIf="lists.length > 0">
+    <ion-list-header>
+      <ion-label>Mes listes de lecture</ion-label>
+    </ion-list-header>
+    <ion-item button *ngFor="let list of lists" (click)="openList(list.id)">
+      <ion-icon slot="start" name="bookmark" color="primary"></ion-icon>
+      <ion-label>
+        <h2>{{ list.name }}</h2>
+        <p>{{ list.bookIds.length }} livre{{ list.bookIds.length > 1 ? 's' : '' }}</p>
+      </ion-label>
+      <ion-icon slot="end" name="chevron-forward"></ion-icon>
+    </ion-item>
+  </ion-list>
 </ion-content>

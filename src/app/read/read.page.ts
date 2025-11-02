@@ -26,7 +26,7 @@ export class ReadPage implements OnInit {
     if (this.bookId && this.chapterId) {
       this.chaptersApi.getChapter(this.bookId, this.chapterId).subscribe((c) => {
         this.chapter = c;
-        this.progress.setProgress(this.bookId, this.chapterId, c.number);
+        this.progress.setProgress(this.bookId, this.chapterId, c.number).subscribe();
       });
     }
   }

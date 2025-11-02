@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ReadingListService, ReadingList } from '../services/reading-list.service';
 
 @Component({
   selector: 'app-tab3',
@@ -6,8 +8,29 @@ import { Component } from '@angular/core';
   styleUrls: ['tab3.page.scss'],
   standalone: false,
 })
-export class Tab3Page {
+export class Tab3Page implements OnInit {
+  lists: ReadingList[] = [];
 
-  constructor() {}
+  constructor(
+    private readonly listsService: ReadingListService,
+    private readonly router: Router,
+  ) {}
 
+  ngOnInit(): void {
+    this.loadLists();
+  }
+
+  ionViewWillEnter(): void {
+    this.loadLists();
+  }
+
+  loadLists(): void {
+    this.listsService.getLists().subscribe((lists) => {
+      this.lists = lists;
+    });
+  }
+
+  openList(listId: string): void {
+    this.router.navigate(['/tabs/reading-list', listId]);
+  }
 }

@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, map } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface BookProgress {
   chapterId?: string | number;
@@ -6,40 +9,37 @@ export interface BookProgress {
   updatedAt: number;
 }
 
-type ProgressMap = Record<string | number, BookProgress>;
-
-const STORAGE_KEY = 'reading_progress_v1';
-
 @Injectable({ providedIn: 'root' })
 export class ReadingProgressService {
-  private readStorage(): ProgressMap {
-    try {
-      const raw = localStorage.getItem(STORAGE_KEY);
-      return raw ? (JSON.parse(raw) as ProgressMap) : {};
-    } catch {
-      return {};
-    }
+  private readonly baseUrl = environment.apiUrl;
+
+  constructor(private readonly http: HttpClient) {}
+
+  hasProgress(bookId: string | number): Observable<boolean> {
+    return this.http
+      .get<{ hasProgress: boolean }>(`${this.baseUrl}/reading-progress/${bookId}/has`)
+      .pipe(map((response) => response.hasProgress));
   }
 
-  private writeStorage(map: ProgressMap): void {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(map));
+  getProgress(bookId: string | number): Observable<BookProgress | undefined> {
+    return this.http
+      .get<BookProgress | null>(`${this.baseUrl}/reading-progress/${bookId}`)
+      .pipe(map((progress) => progress || undefined));
   }
 
-  hasProgress(bookId: string | number): boolean {
-    const map = this.readStorage();
-    return !!map[bookId];
+  setProgress(
+    bookId: string | number,
+    chapterId?: string | number,
+    chapterNumber?: number,
+  ): Observable<BookProgress> {
+    return this.http.post<BookProgress>(`${this.baseUrl}/reading-progress`, {
+      bookId,
+      chapterId,
+      chapterNumber,
+    });
   }
 
-  getProgress(bookId: string | number): BookProgress | undefined {
-    const map = this.readStorage();
-    return map[bookId];
-  }
-
-  setProgress(bookId: string | number, chapterId?: string | number, chapterNumber?: number): void {
-    const map = this.readStorage();
-    map[bookId] = { chapterId, chapterNumber, updatedAt: Date.now() };
-    this.writeStorage(map);
+  getAllProgress(): Observable<Record<string | number, BookProgress>> {
+    return this.http.get<Record<string | number, BookProgress>>(`${this.baseUrl}/reading-progress`);
   }
 }
-
-

@@ -25,30 +25,40 @@ export class BookDetailPage implements OnInit {
     private readonly toastController: ToastController,
   ) {}
 
+
+  hasProgress = false;
+
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.booksApi.getBook(id).subscribe((b) => (this.book = b));
+      this.booksApi.getBook(id).subscribe((b) => {
+        this.book = b;
+        this.checkProgress();
+      });
     }
   }
 
-  hasProgress(): boolean {
-    if (!this.book) return false;
-    return this.progress.hasProgress(this.book.id);
+  checkProgress(): void {
+    if (!this.book) return;
+    this.progress.hasProgress(this.book.id).subscribe((has) => {
+      this.hasProgress = has;
+    });
   }
 
   getActionLabel(): string {
-    return this.hasProgress() ? 'Continuer la lecture' : 'Commencer à lire';
+    return this.hasProgress ? 'Continuer la lecture' : 'Commencer à lire';
   }
 
   onReadClick(): void {
     if (!this.book) return;
-    const p = this.progress.getProgress(this.book.id);
-    // prefer saved chapter, else first chapter
-    const targetChapterId = p?.chapterId || this.book.chapters?.[0]?.id;
-    if (targetChapterId) {
-      this.router.navigate(['/tabs/read', this.book.id, targetChapterId]);
-    }
+    const currentBook = this.book;
+    this.progress.getProgress(currentBook.id).subscribe((p) => {
+      // prefer saved chapter, else first chapter
+      const targetChapterId = p?.chapterId || currentBook.chapters?.[0]?.id;
+      if (targetChapterId && currentBook) {
+        this.router.navigate(['/tabs/read', currentBook.id, targetChapterId]);
+      }
+    });
   }
 
   async onAddToList(): Promise<void> {
@@ -64,16 +74,15 @@ export class BookDetailPage implements OnInit {
     await modal.present();
 
     const { data } = await modal.onWillDismiss();
-    if (data?.listId) {
-      this.lists.addBookToList(data.listId, this.book.id);
-      
-      const toast = await this.toastController.create({
-        message: `Livre ajouté à "${data.listName || 'la liste'}"`,
-        duration: 2000,
-        position: 'bottom',
-        color: 'success',
+    if (data?.listId && this.book) {
+      this.lists.addBookToList(data.listId, this.book.id).subscribe(() => {
+        this.toastController.create({
+          message: `Livre ajouté à "${data.listName || 'la liste'}"`,
+          duration: 2000,
+          position: 'bottom',
+          color: 'success',
+        }).then((toast) => toast.present());
       });
-      await toast.present();
     }
   }
 }

@@ -23,7 +23,9 @@ export class ReadingListModalComponent implements OnInit {
   }
 
   loadLists(): void {
-    this.lists = this.listsService.getLists();
+    this.listsService.getLists().subscribe((lists) => {
+      this.lists = lists;
+    });
   }
 
   selectList(listId: string): void {
@@ -45,11 +47,11 @@ export class ReadingListModalComponent implements OnInit {
     if (!this.newListName.trim()) {
       return;
     }
-    const newList = this.listsService.createList(this.newListName.trim());
-    this.lists.push(newList); // Ajouter à la liste locale pour l'affichage
-    this.modalController.dismiss({ 
-      listId: newList.id,
-      listName: newList.name 
+    this.listsService.createList(this.newListName.trim()).subscribe((newList) => {
+      this.modalController.dismiss({ 
+        listId: newList.id,
+        listName: newList.name 
+      });
     });
   }
 

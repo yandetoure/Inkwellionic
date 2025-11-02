@@ -32,6 +32,10 @@ const routes: Routes = [
         loadChildren: () => import('../read/read.module').then(m => m.ReadPageModule)
       },
       {
+        path: 'reading-list/:id',
+        loadChildren: () => import('../reading-list-detail/reading-list-detail.module').then(m => m.ReadingListDetailPageModule)
+      },
+      {
         path: '',
         redirectTo: '/tabs/tab1',
         pathMatch: 'full'
