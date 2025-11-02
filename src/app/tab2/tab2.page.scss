@@ -1,0 +1,37 @@
+// Styles pour masquer la scrollbar sur le scroll horizontal
+::-webkit-scrollbar {
+  display: none;
+}
+
+// Style pour les conteneurs de livres horizontaux
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  gap: 16px;
+  padding-bottom: 16px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+// Style pour les cartes de livres dans les scrolls horizontaux
+.scroll-card {
+  min-width: 200px;
+  width: 200px;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+// Style pour les titres de section
+.section-title {
+  font-weight: bold;
+  margin-bottom: 16px;
+  padding-left: 8px;
+}
+
+// Style pour la grille de livres
+.books-grid {
+  padding: 16px;
+  padding-top: 8px;
+}
+

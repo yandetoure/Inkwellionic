@@ -13,31 +13,79 @@
     </ion-toolbar>
   </ion-header>
 
-  
+  <!-- Section Recommandé pour vous -->
+  <div style="padding: 16px;">
+    <h2 style="font-weight: bold; margin-bottom: 16px;">⭐ Recommandé pour vous</h2>
+    <div style="display: flex; overflow-x: auto; gap: 16px; padding-bottom: 16px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+      <ion-card *ngFor="let b of recommendedBooks" style="min-width: 200px; width: 200px; margin: 0;" [routerLink]="['/tabs/book', b.id]">
+        <ion-img *ngIf="b.cover" [src]="b.cover" alt="cover"></ion-img>
+        <ion-card-header>
+          <ion-card-title style="font-size: 16px;">{{ b.title || ('Livre #' + b.id) }}</ion-card-title>
+          <ion-card-subtitle *ngIf="b.author" style="font-size: 12px;">{{ b.author }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <div *ngIf="b.rating || b.total_likes" style="margin-top:8px;">
+            <ion-text *ngIf="b.rating" style="font-size: 12px;">⭐ {{ b.rating }}</ion-text>
+            <ion-text *ngIf="b.total_likes" style="margin-left:12px; font-size: 12px;">❤ {{ b.total_likes }}</ion-text>
+          </div>
+          <ion-badge *ngIf="b.is_paid" color="warning" style="margin-top:8px; font-size: 11px;">Payant</ion-badge>
+          <ion-badge *ngIf="!b.is_paid" color="success" style="margin-top:8px; font-size: 11px;">Gratuit</ion-badge>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
 
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let b of books">
-        <ion-card [routerLink]="['/tabs/book', b.id]">
-          <ion-img *ngIf="b.cover" [src]="b.cover" alt="cover"></ion-img>
-          <ion-card-header>
-            <ion-card-title>{{ b.title || ('Livre #' + b.id) }}</ion-card-title>
-            <ion-card-subtitle *ngIf="b.author">{{ b.author }}</ion-card-subtitle>
-          </ion-card-header>
-          <ion-card-content>
-            <ion-chip *ngIf="b.category" color="primary" outline>
-              <ion-label>{{ b.category }}</ion-label>
-            </ion-chip>
-            <div *ngIf="b.rating || b.total_likes" style="margin-top:8px;">
-              <ion-text *ngIf="b.rating">⭐ {{ b.rating }}</ion-text>
-              <ion-text *ngIf="b.total_likes" style="margin-left:12px;">❤ {{ b.total_likes }}</ion-text>
-            </div>
-            <p *ngIf="b.description" style="margin-top:8px;">{{ b.description }}</p>
-            <ion-badge *ngIf="b.is_paid" color="warning" style="margin-top:8px;">Payant</ion-badge>
-            <ion-badge *ngIf="!b.is_paid" color="success" style="margin-top:8px;">Gratuit</ion-badge>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+  <!-- Sliders par catégorie -->
+  <div *ngFor="let catData of categoriesWithBooks" style="padding: 16px; padding-top: 8px;">
+    <h2 style="font-weight: bold; margin-bottom: 16px;">
+      <span *ngIf="catData.category.icon" style="margin-right: 8px;">{{ catData.category.icon }}</span>
+      {{ catData.category.name }}
+    </h2>
+    <div style="display: flex; overflow-x: auto; gap: 16px; padding-bottom: 16px; -webkit-overflow-scrolling: touch; scrollbar-width: none;">
+      <ion-card *ngFor="let b of catData.books" style="min-width: 200px; width: 200px; margin: 0;" [routerLink]="['/tabs/book', b.id]">
+        <ion-img *ngIf="b.cover" [src]="b.cover" alt="cover"></ion-img>
+        <ion-card-header>
+          <ion-card-title style="font-size: 16px;">{{ b.title || ('Livre #' + b.id) }}</ion-card-title>
+          <ion-card-subtitle *ngIf="b.author" style="font-size: 12px;">{{ b.author }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+          <div *ngIf="b.rating || b.total_likes" style="margin-top:8px;">
+            <ion-text *ngIf="b.rating" style="font-size: 12px;">⭐ {{ b.rating }}</ion-text>
+            <ion-text *ngIf="b.total_likes" style="margin-left:12px; font-size: 12px;">❤ {{ b.total_likes }}</ion-text>
+          </div>
+          <ion-badge *ngIf="b.is_paid" color="warning" style="margin-top:8px; font-size: 11px;">Payant</ion-badge>
+          <ion-badge *ngIf="!b.is_paid" color="success" style="margin-top:8px; font-size: 11px;">Gratuit</ion-badge>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+
+  <!-- Tous les livres en grille 2 par ligne -->
+  <div style="padding: 16px; padding-top: 8px;">
+    <h2 style="font-weight: bold; margin-bottom: 16px;">📚 Tous les livres</h2>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="6" size-md="4" size-lg="3" *ngFor="let b of allBooks">
+          <ion-card [routerLink]="['/tabs/book', b.id]">
+            <ion-img *ngIf="b.cover" [src]="b.cover" alt="cover"></ion-img>
+            <ion-card-header>
+              <ion-card-title style="font-size: 14px;">{{ b.title || ('Livre #' + b.id) }}</ion-card-title>
+              <ion-card-subtitle *ngIf="b.author" style="font-size: 11px;">{{ b.author }}</ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-content>
+              <ion-chip *ngIf="b.category" color="primary" outline style="font-size: 10px;">
+                <ion-label>{{ b.category }}</ion-label>
+              </ion-chip>
+              <div *ngIf="b.rating || b.total_likes" style="margin-top:8px;">
+                <ion-text *ngIf="b.rating" style="font-size: 11px;">⭐ {{ b.rating }}</ion-text>
+                <ion-text *ngIf="b.total_likes" style="margin-left:12px; font-size: 11px;">❤ {{ b.total_likes }}</ion-text>
+              </div>
+              <ion-badge *ngIf="b.is_paid" color="warning" style="margin-top:8px; font-size: 10px;">Payant</ion-badge>
+              <ion-badge *ngIf="!b.is_paid" color="success" style="margin-top:8px; font-size: 10px;">Gratuit</ion-badge>
+            </ion-card-content>
+          </ion-card>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </div>
 </ion-content>
