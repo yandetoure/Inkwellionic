@@ -113,6 +113,11 @@ export class BookDetailPage implements OnInit {
     });
   }
 
+  onChapterClick(chapterId: string | number): void {
+    if (!this.book) return;
+    this.router.navigate(['/tabs/read', this.book.id, chapterId]);
+  }
+
   private async showToast(message: string): Promise<void> {
     const toast = await this.toastController.create({
       message,
