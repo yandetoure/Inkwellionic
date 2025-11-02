@@ -30,8 +30,14 @@
 
 <!-- Slide Menu -->
 <div class="slide-menu" [class.active]="isMenuOpen">
-  <div class="menu-header">
-    <h2>Chapitres</h2>
+  <div class="menu-header" *ngIf="book">
+    <div class="book-info">
+      <img *ngIf="book.cover" [src]="book.cover" alt="cover" class="book-cover" />
+      <div class="book-details">
+        <h3>{{ book.title }}</h3>
+        <p *ngIf="book.author" class="author">{{ book.author }}</p>
+      </div>
+    </div>
     <ion-button fill="clear" (click)="toggleMenu()">
       <ion-icon name="close-outline"></ion-icon>
     </ion-button>

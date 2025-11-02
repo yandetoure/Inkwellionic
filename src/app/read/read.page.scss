@@ -42,18 +42,48 @@
 .menu-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
   padding: 20px;
   border-bottom: 1px solid #e5e7eb;
+  gap: 16px;
 
-  h2 {
-    margin: 0;
-    font-size: 24px;
-    font-weight: bold;
+  .book-info {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .book-cover {
+    width: 60px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    flex-shrink: 0;
+  }
+
+  .book-details {
+    flex: 1;
+    min-width: 0;
+
+    h3 {
+      margin: 0 0 4px 0;
+      font-size: 16px;
+      font-weight: bold;
+      color: #111827;
+    }
+
+    .author {
+      margin: 0;
+      font-size: 14px;
+      color: #6b7280;
+    }
   }
 
   ion-button {
     --color: #6b7280;
+    flex-shrink: 0;
   }
 }
 
