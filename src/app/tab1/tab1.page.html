@@ -1,17 +1,215 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Accueil
-    </ion-title>
+    <ion-title>Accueil</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="home-content">
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Accueil</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <app-explore-container name="Page Accueil"></app-explore-container>
+  <div class="home-container">
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="hero-slides-container">
+        <div *ngFor="let slide of heroSlides; let i = index" 
+             class="hero-slide"
+             [class.active]="i === currentSlide"
+             [style.background-image]="'url(' + slide.image + ')'">
+          <div class="hero-overlay"></div>
+          <div class="hero-content">
+            <h1>{{ slide.title }}</h1>
+            <p>{{ slide.description }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Arrows -->
+      <ion-button fill="clear" class="hero-nav hero-nav-prev" (click)="prevSlide()">
+        <ion-icon name="chevron-back"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" class="hero-nav hero-nav-next" (click)="nextSlide()">
+        <ion-icon name="chevron-forward"></ion-icon>
+      </ion-button>
+
+      <!-- Slide Indicators -->
+      <div class="hero-indicators">
+        <span *ngFor="let slide of heroSlides; let i = index" 
+              [class.active]="i === currentSlide"
+              (click)="currentSlide = i"></span>
+      </div>
+    </div>
+
+    <!-- Categories Horizontal Scroll -->
+    <div class="categories-section">
+      <div class="categories-scroll">
+        <div class="categories-container">
+          <ion-chip *ngFor="let category of categories" 
+                   [class.active]="selectedCategory === category.id"
+                   (click)="selectCategory(category.id)">
+            <ion-label>{{ category.icon }} {{ category.name }}</ion-label>
+          </ion-chip>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filtered Books by Category -->
+    <div *ngIf="selectedCategory" class="filtered-section">
+      <div class="section-header">
+        <h2>{{ getSelectedCategoryIcon() }} {{ getSelectedCategoryName() }}</h2>
+        <ion-button fill="clear" size="small" (click)="closeCategory()">Fermer</ion-button>
+      </div>
+      <div class="books-scroll">
+        <div class="books-container">
+          <div *ngFor="let book of getFilteredBooks()" class="book-card" (click)="onBookClick(book.id)">
+            <img [src]="book.cover" [alt]="book.title" />
+            <div class="book-info">
+              <h3>{{ book.title }}</h3>
+              <p>{{ book.author }}</p>
+              <div class="book-rating" *ngIf="book.rating">
+                <ion-icon name="star"></ion-icon>
+                <span>{{ book.rating }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recommended Section -->
+    <section class="section">
+      <div class="section-header">
+        <div class="section-title">
+          <ion-icon name="star" color="primary"></ion-icon>
+          <h2>Recommandés pour vous</h2>
+        </div>
+        <ion-button fill="clear" size="small">Voir tout</ion-button>
+      </div>
+      <div class="books-scroll">
+        <div class="books-container">
+          <div *ngFor="let book of getRecommendedBooks()" class="book-card" (click)="onBookClick(book.id)">
+            <img [src]="book.cover" [alt]="book.title" />
+            <div class="book-badge" *ngIf="book.is_paid">Premium</div>
+            <div class="book-info">
+              <h3>{{ book.title }}</h3>
+              <p>{{ book.author }}</p>
+              <div class="book-rating" *ngIf="book.rating">
+                <ion-icon name="star"></ion-icon>
+                <span>{{ book.rating }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Popular Section -->
+    <section class="section section-gradient">
+      <div class="section-header">
+        <div class="section-title">
+          <ion-icon name="trending-up" color="secondary"></ion-icon>
+          <h2>Les plus lus du moment 📈</h2>
+        </div>
+        <ion-button fill="clear" size="small">Voir tout</ion-button>
+      </div>
+      <div class="books-scroll">
+        <div class="books-container">
+          <div *ngFor="let book of getPopularBooks()" class="book-card" (click)="onBookClick(book.id)">
+            <img [src]="book.cover" [alt]="book.title" />
+            <div class="book-badge" *ngIf="book.is_paid">Premium</div>
+            <div class="book-info">
+              <h3>{{ book.title }}</h3>
+              <p>{{ book.author }}</p>
+              <div class="book-rating" *ngIf="book.rating">
+                <ion-icon name="star"></ion-icon>
+                <span>{{ book.rating }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Featured Authors Section -->
+    <section class="section">
+      <div class="section-header">
+        <h2>Auteurs Vedettes ✨</h2>
+        <ion-button fill="clear" size="small">Voir tout</ion-button>
+      </div>
+      <div class="authors-scroll">
+        <div class="authors-container">
+          <div *ngFor="let author of getFeaturedAuthors()" class="author-card">
+            <img [src]="author.avatar" [alt]="author.name" class="author-avatar" />
+            <div class="author-info">
+              <h3>{{ author.name }}</h3>
+              <p>{{ author.bio }}</p>
+              <div class="author-stats">
+                <span>{{ author.bookCount }} livres</span>
+                <span>{{ formatReads(author.totalReads) }} lectures</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Romance Section -->
+    <section class="section section-romance">
+      <div class="section-header">
+        <h2>Histoires d'amour 💕</h2>
+        <ion-button fill="clear" size="small">Voir tout</ion-button>
+      </div>
+      <div class="books-scroll">
+        <div class="books-container">
+          <div *ngFor="let book of getRomanceBooks()" class="book-card" (click)="onBookClick(book.id)">
+            <img [src]="book.cover" [alt]="book.title" />
+            <div class="book-badge" *ngIf="book.is_paid">Premium</div>
+            <div class="book-info">
+              <h3>{{ book.title }}</h3>
+              <p>{{ book.author }}</p>
+              <div class="book-rating" *ngIf="book.rating">
+                <ion-icon name="star"></ion-icon>
+                <span>{{ book.rating }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Dark/Thriller Section -->
+    <section class="section section-dark">
+      <div class="section-header">
+        <h2>Trahison & Secrets 😈</h2>
+        <ion-button fill="clear" size="small" color="light">Voir tout</ion-button>
+      </div>
+      <div class="books-scroll">
+        <div class="books-container">
+          <div *ngFor="let book of getDarkBooks()" class="book-card book-card-dark" (click)="onBookClick(book.id)">
+            <img [src]="book.cover" [alt]="book.title" />
+            <div class="book-badge" *ngIf="book.is_paid">Premium</div>
+            <div class="book-info">
+              <h3>{{ book.title }}</h3>
+              <p>{{ book.author }}</p>
+              <div class="book-rating" *ngIf="book.rating">
+                <ion-icon name="star"></ion-icon>
+                <span>{{ book.rating }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Writer CTA Section -->
+    <section class="cta-section">
+      <ion-icon name="create-outline"></ion-icon>
+      <h2>Devenez Auteur</h2>
+      <p>Partagez vos histoires avec des milliers de lecteurs passionnés</p>
+      <ion-button color="light">Commencer à écrire</ion-button>
+    </section>
+  </div>
 </ion-content>
