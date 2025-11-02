@@ -4,6 +4,11 @@
       <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
     </ion-buttons>
     <ion-title>{{ chapter?.title || 'Lecture' }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleMenu()">
+        <ion-icon name="list-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -19,4 +24,47 @@
     <p style="white-space: pre-wrap; line-height: 1.6; margin-top: 12px;">{{ c.content }}</p>
   </div>
 </ion-content>
+
+<!-- Overlay -->
+<div class="overlay" [class.active]="isMenuOpen" (click)="toggleMenu()"></div>
+
+<!-- Slide Menu -->
+<div class="slide-menu" [class.active]="isMenuOpen">
+  <div class="menu-header">
+    <h2>Chapitres</h2>
+    <ion-button fill="clear" (click)="toggleMenu()">
+      <ion-icon name="close-outline"></ion-icon>
+    </ion-button>
+  </div>
+  <div class="menu-content">
+    <div 
+      *ngFor="let ch of chapters" 
+      class="chapter-item"
+      [class.current]="ch.id === chapterId"
+      [class.locked]="ch.isPaid && ch.id !== chapterId"
+      (click)="selectChapter(ch)">
+      <div class="chapter-number" [class.locked-icon]="ch.isPaid && ch.id !== chapterId">
+        <ion-icon *ngIf="ch.isPaid && ch.id !== chapterId" name="lock-closed-outline"></ion-icon>
+        <span *ngIf="!(ch.isPaid && ch.id !== chapterId)">{{ ch.number }}</span>
+      </div>
+      <div class="chapter-info">
+        <h3>Chapitre {{ ch.number }}: {{ ch.title }}</h3>
+        <p *ngIf="ch.wordCount">{{ ch.wordCount }} mots</p>
+        <div class="chapter-stats">
+          <span *ngIf="ch.likes">
+            <ion-icon name="heart-outline"></ion-icon>
+            {{ ch.likes }}
+          </span>
+          <span *ngIf="ch.views">
+            <ion-icon name="eye-outline"></ion-icon>
+            {{ ch.views }}
+          </span>
+        </div>
+        <ion-badge *ngIf="ch.isPaid && ch.id !== chapterId" color="warning">
+          {{ ch.coinCost }} 🪙
+        </ion-badge>
+      </div>
+    </div>
+  </div>
+</div>
 

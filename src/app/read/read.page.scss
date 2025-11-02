@@ -1,2 +1,173 @@
-// Styles pour la page de lecture
+// Overlay
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0);
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 
+  &.active {
+    opacity: 0.5;
+    pointer-events: all;
+  }
+}
+
+// Slide Menu
+.slide-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 85%;
+  max-width: 400px;
+  background: white;
+  z-index: 999;
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+
+  &.active {
+    transform: translateX(0);
+  }
+}
+
+// Menu header
+.menu-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e5e7eb;
+
+  h2 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  ion-button {
+    --color: #6b7280;
+  }
+}
+
+// Menu content
+.menu-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+// Chapter item
+.chapter-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+
+  &:active {
+    background: #f9fafb;
+  }
+
+  &.current {
+    background: #fef3c7;
+    border-color: #fbbf24;
+  }
+
+  &.locked {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Chapter number
+.chapter-number {
+  width: 48px;
+  height: 48px;
+  background: #9333ea;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  span {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  ion-icon {
+    font-size: 24px;
+    color: white;
+  }
+
+  &.locked-icon {
+    background: #9ca3af;
+  }
+}
+
+// Chapter info
+.chapter-info {
+  flex: 1;
+  min-width: 0;
+
+  h3 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #111827;
+  }
+
+  p {
+    margin: 0 0 8px 0;
+    font-size: 12px;
+    color: #6b7280;
+  }
+}
+
+// Chapter stats
+.chapter-stats {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+
+  span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: #6b7280;
+
+    ion-icon {
+      font-size: 16px;
+    }
+  }
+}
+
+// Styles pour la page de lecture
+ion-content {
+  div {
+    h2 {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 12px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+  }
+}
