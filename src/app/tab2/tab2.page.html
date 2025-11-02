@@ -4,6 +4,13 @@
       Bibliothèque
     </ion-title>
   </ion-toolbar>
+  <ion-searchbar
+    [(ngModel)]="searchQuery"
+    (ionInput)="onSearchChange($event)"
+    placeholder="Rechercher un livre..."
+    show-clear-button="focus"
+    debounce="300">
+  </ion-searchbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
@@ -65,7 +72,7 @@
     <h2 style="font-weight: bold; margin-bottom: 16px;">📚 Tous les livres</h2>
     <ion-grid>
       <ion-row>
-        <ion-col size="6" size-md="4" size-lg="3" *ngFor="let b of allBooks">
+        <ion-col size="6" size-md="4" size-lg="3" *ngFor="let b of filteredAllBooks">
           <ion-card [routerLink]="['/tabs/book', b.id]">
             <ion-img *ngIf="b.cover" [src]="b.cover" alt="cover"></ion-img>
             <ion-card-header>

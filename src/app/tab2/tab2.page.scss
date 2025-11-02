@@ -3,6 +3,13 @@
   display: none;
 }
 
+// Style uniforme pour toutes les images de couverture (hauteur fixe pour tous)
+ion-img {
+  height: 220px;
+  object-fit: cover;
+  width: 100%;
+}
+
 // Style pour les conteneurs de livres horizontaux
 .scroll-container {
   display: flex;
@@ -34,4 +41,5 @@
   padding: 16px;
   padding-top: 8px;
 }
+
 
