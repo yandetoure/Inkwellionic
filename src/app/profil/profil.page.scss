@@ -1,2 +1,203 @@
+// Header with gradient
+.gradient-header {
+  background: linear-gradient(to right, #9333ea, #ec4899);
+  height: 120px;
+  width: 100%;
+}
 
+// Profile container
+.profile-container {
+  padding: 0 24px;
+  margin-top: -80px;
+}
 
+// Profile card
+.profile-card {
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+}
+
+// Avatar section
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: -60px;
+  margin-bottom: 24px;
+}
+
+.avatar-wrapper {
+  position: relative;
+}
+
+.main-avatar {
+  width: 96px;
+  height: 96px;
+  border: 4px solid white;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.edit-avatar-btn {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  --border-radius: 50%;
+  --padding-start: 8px;
+  --padding-end: 8px;
+  width: 32px;
+  height: 32px;
+  --background: #9333ea;
+}
+
+.user-name {
+  margin-top: 12px;
+  margin-bottom: 0;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+// Coins section
+.coins-section {
+  background: linear-gradient(to right, #fbbf24, #f97316);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.coins-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.coins-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+}
+
+.coins-icon {
+  font-size: 32px;
+  color: white;
+}
+
+.coins-label {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.9;
+  color: white;
+}
+
+.coins-amount {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+}
+
+.buy-btn {
+  --background: white;
+  --color: #f97316;
+  border-radius: 8px;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+// Stats grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 0;
+}
+
+.stat-item {
+  background: #f9fafb;
+  border-radius: 16px;
+  padding: 16px;
+  text-align: center;
+}
+
+.stat-icon {
+  font-size: 24px;
+  margin-bottom: 8px;
+
+  &.purple {
+    color: #9333ea;
+  }
+
+  &.blue {
+    color: #3b82f6;
+  }
+}
+
+.stat-label {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.stat-value {
+  margin: 4px 0 0 0;
+  font-size: 24px;
+  font-weight: bold;
+  color: #111827;
+}
+
+// Writer section
+.writer-section {
+  margin-top: 24px;
+}
+
+.writer-btn {
+  --background: linear-gradient(to right, #9333ea, #ec4899);
+  --border-radius: 16px;
+  --padding: 16px;
+  font-weight: bold;
+  box-shadow: 0 10px 30px rgba(147, 51, 234, 0.3);
+}
+
+// Menu section
+.menu-section {
+  margin-top: 24px;
+  background: white;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid #e5e7eb;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &.last {
+    border-bottom: none;
+  }
+
+  ion-icon {
+    font-size: 20px;
+    color: #6b7280;
+  }
+
+  span {
+    flex: 1;
+    margin-left: 12px;
+    font-size: 16px;
+  }
+
+  &:active {
+    background-color: #f9fafb;
+  }
+}

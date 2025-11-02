@@ -13,20 +13,90 @@
     </ion-toolbar>
   </ion-header>
 
-  <ion-card *ngIf="me as user">
-    <ion-item lines="none">
-      <ion-avatar slot="start">
-        <img [src]="user.avatar" alt="avatar" />
-      </ion-avatar>
-      <ion-label>
-        <h2>{{ user.name }}</h2>
-        <p>Pièces: {{ user.coins || 0 }}</p>
-      </ion-label>
-    </ion-item>
-    <ion-card-content>
-      <p>Livres écrits: {{ user.booksWritten || 0 }}</p>
-    </ion-card-content>
-  </ion-card>
+  <!-- Header with gradient -->
+  <div class="gradient-header"></div>
+
+  <!-- Profile Card -->
+  <div class="profile-container">
+    <div class="profile-card">
+      <!-- Avatar and Name -->
+      <div class="avatar-section" *ngIf="me as user">
+        <div class="avatar-wrapper">
+          <ion-avatar class="main-avatar">
+            <img [src]="user.avatar || 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80'" alt="avatar" />
+          </ion-avatar>
+          <ion-button fill="solid" class="edit-avatar-btn">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+        </div>
+        <h2 class="user-name">{{ user.name }}</h2>
+      </div>
+
+      <!-- Coins Section -->
+      <div class="coins-section" *ngIf="me as user">
+        <div class="coins-content">
+          <div class="coins-info">
+            <ion-icon name="logo-bitcoin" class="coins-icon"></ion-icon>
+            <div>
+              <p class="coins-label">Mes Pièces</p>
+              <p class="coins-amount">{{ user.coins || 0 }}</p>
+            </div>
+          </div>
+          <ion-button fill="solid" class="buy-btn" (click)="onBuyCoins()">
+            <ion-icon slot="start" name="add"></ion-icon>
+            Acheter
+          </ion-button>
+        </div>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats-grid" *ngIf="me as user">
+        <div class="stat-item">
+          <ion-icon name="library-outline" class="stat-icon purple"></ion-icon>
+          <p class="stat-label">Livres écrits</p>
+          <p class="stat-value">{{ user.booksWritten || 0 }}</p>
+        </div>
+        <div class="stat-item">
+          <ion-icon name="library-outline" class="stat-icon blue"></ion-icon>
+          <p class="stat-label">Livres lus</p>
+          <p class="stat-value">12</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Writer Section -->
+    <div class="writer-section" *ngIf="me?.isAuthor">
+      <ion-button expand="block" class="writer-btn">
+        <ion-icon slot="start" name="create-outline"></ion-icon>
+        Voir mon espace écrivain
+        <ion-icon slot="end" name="arrow-forward"></ion-icon>
+      </ion-button>
+    </div>
+
+    <!-- Menu Items -->
+    <div class="menu-section">
+      <div class="menu-item" (click)="openSettings()">
+        <ion-icon name="settings-outline"></ion-icon>
+        <span>Paramètres</span>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+      <div class="menu-item" (click)="openNotifications()">
+        <ion-icon name="notifications-outline"></ion-icon>
+        <span>Notifications</span>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+      <div class="menu-item" (click)="openHelp()">
+        <ion-icon name="help-circle-outline"></ion-icon>
+        <span>Aide et Support</span>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+      <div class="menu-item last" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Déconnexion</span>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </div>
+    </div>
+  </div>
 </ion-content>
 
 

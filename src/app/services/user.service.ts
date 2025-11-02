@@ -9,6 +9,7 @@ export interface UserProfile {
   avatar?: string;
   coins?: number;
   booksWritten?: number;
+  isAuthor?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })
