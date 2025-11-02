@@ -17,6 +17,9 @@ export class ReadPage implements OnInit {
   chapterId!: string;
   chapters: BookChapterSummary[] = [];
   isMenuOpen = false;
+  isLiked = false;
+  likes = 0;
+  commentsCount = 0;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -33,6 +36,9 @@ export class ReadPage implements OnInit {
       this.chaptersApi.getChapter(this.bookId, this.chapterId).subscribe((c) => {
         this.chapter = c;
         this.progress.setProgress(this.bookId, this.chapterId, c.number);
+        this.isLiked = c.isLiked;
+        this.likes = c.likes;
+        this.commentsCount = c.comments?.length || 0;
       });
       
       // Charger la liste des chapitres du livre
@@ -52,6 +58,21 @@ export class ReadPage implements OnInit {
       this.router.navigate(['/tabs/read', this.bookId, ch.id]);
       this.isMenuOpen = false;
     }
+  }
+
+  toggleLike(): void {
+    this.isLiked = !this.isLiked;
+    this.likes = this.isLiked ? this.likes + 1 : this.likes - 1;
+  }
+
+  toggleComments(): void {
+    console.log('Toggle comments');
+    // TODO: Implémenter l'ouverture des commentaires
+  }
+
+  share(): void {
+    console.log('Share');
+    // TODO: Implémenter le partage
   }
 }
 

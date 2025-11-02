@@ -186,18 +186,104 @@
   }
 }
 
-// Styles pour la page de lecture
-ion-content {
-  div {
-    h2 {
-      font-size: 20px;
-      font-weight: bold;
-      margin-bottom: 12px;
+// Header toolbar
+.header-toolbar {
+  .header-center {
+    flex: 1;
+    text-align: center;
+    margin: 0 16px;
+
+    .book-title {
+      margin: 0;
+      font-size: 14px;
+      color: #374151;
+      font-weight: 500;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
-    p {
-      font-size: 16px;
-      line-height: 1.6;
+    .chapter-subtitle {
+      margin: 0;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+  }
+}
+
+// Chapter content
+.chapter-content {
+  padding: 24px;
+  padding-bottom: 100px;
+}
+
+.chapter-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #111827;
+  margin: 0 0 8px 0;
+}
+
+.chapter-meta {
+  font-size: 14px;
+  color: #9ca3af;
+  margin: 0 0 24px 0;
+}
+
+.prose {
+  max-width: 100%;
+
+  .chapter-text {
+    color: #374151;
+    line-height: 1.75;
+    white-space: pre-wrap;
+    font-size: 16px;
+    margin: 0;
+  }
+}
+
+// Action bar
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #e5e7eb;
+  padding: 16px 24px;
+  z-index: 100;
+
+  .action-buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: none;
+      border: none;
+      color: #6b7280;
+      padding: 8px;
+      cursor: pointer;
+
+      ion-icon {
+        font-size: 24px;
+        margin-bottom: 4px;
+      }
+
+      span {
+        font-size: 12px;
+      }
+
+      &:active {
+        opacity: 0.7;
+      }
+
+      &.liked {
+        color: #ef4444;
+      }
     }
   }
 }
