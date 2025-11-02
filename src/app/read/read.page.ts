@@ -20,6 +20,7 @@ export class ReadPage implements OnInit {
   isLiked = false;
   likes = 0;
   commentsCount = 0;
+  actualWordCount = 0;
 
   constructor(
     private readonly route: ActivatedRoute,
@@ -39,6 +40,7 @@ export class ReadPage implements OnInit {
         this.isLiked = c.isLiked;
         this.likes = c.likes;
         this.commentsCount = c.comments?.length || 0;
+        this.actualWordCount = this.countWords(c.content);
       });
       
       // Charger la liste des chapitres du livre
@@ -73,6 +75,11 @@ export class ReadPage implements OnInit {
   share(): void {
     console.log('Share');
     // TODO: Implémenter le partage
+  }
+
+  countWords(text: string): number {
+    if (!text || text.trim() === '') return 0;
+    return text.trim().split(/\s+/).length;
   }
 }
 
