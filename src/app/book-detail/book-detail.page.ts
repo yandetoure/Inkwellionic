@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { BookService, BookDetail } from '../services/book.service';
 import { ReadingProgressService } from '../services/reading-progress.service';
-import { ReadingListService, ReadingList } from '../services/reading-list.service';
+import { ReadingListService } from '../services/reading-list.service';
 import { ReadingListModalComponent } from '../components/reading-list-modal/reading-list-modal.component';
 
 @Component({
@@ -22,6 +22,7 @@ export class BookDetailPage implements OnInit {
     private readonly progress: ReadingProgressService,
     private readonly lists: ReadingListService,
     private readonly modalController: ModalController,
+    private readonly toastController: ToastController,
   ) {}
 
   ngOnInit(): void {
@@ -65,6 +66,14 @@ export class BookDetailPage implements OnInit {
     const { data } = await modal.onWillDismiss();
     if (data?.listId) {
       this.lists.addBookToList(data.listId, this.book.id);
+      
+      const toast = await this.toastController.create({
+        message: `Livre ajouté à "${data.listName || 'la liste'}"`,
+        duration: 2000,
+        position: 'bottom',
+        color: 'success',
+      });
+      await toast.present();
     }
   }
 }

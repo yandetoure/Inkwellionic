@@ -10,8 +10,40 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <!-- Bouton pour créer une nouvelle liste -->
+  <!-- Formulaire de création -->
+  <ion-card *ngIf="showCreateForm">
+    <ion-card-header>
+      <ion-card-title>Créer une nouvelle liste</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <ion-label position="stacked">Nom de la liste</ion-label>
+        <ion-input 
+          [(ngModel)]="newListName" 
+          placeholder="Ex: Mes favoris"
+          (keyup.enter)="createAndSelectList()">
+        </ion-input>
+      </ion-item>
+      <div style="display: flex; gap: 8px; margin-top: 12px;">
+        <ion-button 
+          expand="block" 
+          fill="outline"
+          (click)="toggleCreateForm()">
+          Annuler
+        </ion-button>
+        <ion-button 
+          expand="block" 
+          (click)="createAndSelectList()"
+          [disabled]="!newListName.trim()">
+          Créer et ajouter
+        </ion-button>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Bouton pour créer une nouvelle liste (si le formulaire n'est pas affiché) -->
   <ion-button 
+    *ngIf="!showCreateForm"
     expand="block" 
     fill="outline" 
     (click)="toggleCreateForm()"
@@ -19,27 +51,6 @@
     <ion-icon slot="start" name="add"></ion-icon>
     Créer une nouvelle liste
   </ion-button>
-
-  <!-- Formulaire de création -->
-  <ion-card *ngIf="showCreateForm" style="margin-bottom: 16px;">
-    <ion-card-content>
-      <ion-item>
-        <ion-label position="stacked">Nom de la liste</ion-label>
-        <ion-input 
-          [(ngModel)]="newListName" 
-          placeholder="Ex: Mes favoris"
-          (ionBlur)="createAndSelectList()">
-        </ion-input>
-      </ion-item>
-      <ion-button 
-        expand="block" 
-        (click)="createAndSelectList()"
-        [disabled]="!newListName.trim()"
-        style="margin-top: 12px;">
-        Créer et ajouter
-      </ion-button>
-    </ion-card-content>
-  </ion-card>
 
   <!-- Liste des listes existantes -->
   <div *ngIf="lists.length === 0 && !showCreateForm">
@@ -55,7 +66,7 @@
       <ion-label>Listes de lecture</ion-label>
     </ion-list-header>
     <ion-item button *ngFor="let list of lists" (click)="selectList(list.id)">
-      <ion-icon slot="start" name="bookmark"></ion-icon>
+      <ion-icon slot="start" name="bookmark" color="primary"></ion-icon>
       <ion-label>
         <h2>{{ list.name }}</h2>
         <p>{{ list.bookIds.length }} livre(s)</p>

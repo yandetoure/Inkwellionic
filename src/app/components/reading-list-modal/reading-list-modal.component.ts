@@ -27,7 +27,11 @@ export class ReadingListModalComponent implements OnInit {
   }
 
   selectList(listId: string): void {
-    this.modalController.dismiss({ listId });
+    const list = this.lists.find(l => l.id === listId);
+    this.modalController.dismiss({ 
+      listId,
+      listName: list?.name 
+    });
   }
 
   toggleCreateForm(): void {
@@ -42,7 +46,11 @@ export class ReadingListModalComponent implements OnInit {
       return;
     }
     const newList = this.listsService.createList(this.newListName.trim());
-    this.selectList(newList.id);
+    this.lists.push(newList); // Ajouter à la liste locale pour l'affichage
+    this.modalController.dismiss({ 
+      listId: newList.id,
+      listName: newList.name 
+    });
   }
 
   dismiss(): void {
