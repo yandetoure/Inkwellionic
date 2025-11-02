@@ -25,9 +25,7 @@ export class Tab3Page implements OnInit {
   }
 
   loadLists(): void {
-    this.listsService.getLists().subscribe((lists) => {
-      this.lists = lists;
-    });
+    this.lists = this.listsService.getLists();
   }
 
   openList(listId: string): void {

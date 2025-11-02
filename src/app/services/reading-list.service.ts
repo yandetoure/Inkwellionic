@@ -1,46 +1,66 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map, tap } from 'rxjs';
-import { environment } from '../../environments/environment';
 
 export interface ReadingList {
   id: string;
   name: string;
   bookIds: Array<string | number>;
-  createdAt: number;
 }
 
 @Injectable({ providedIn: 'root' })
 export class ReadingListService {
-  private readonly baseUrl = environment.apiUrl;
+  private readonly storageKey = 'readingLists:v1';
 
-  constructor(private readonly http: HttpClient) {}
-
-  getLists(): Observable<ReadingList[]> {
-    return this.http.get<ReadingList[]>(`${this.baseUrl}/reading-lists`);
+  private readAll(): ReadingList[] {
+    try {
+      const raw = localStorage.getItem(this.storageKey);
+      return raw ? JSON.parse(raw) : [];
+    } catch {
+      return [];
+    }
   }
 
-  createList(name: string): Observable<ReadingList> {
-    return this.http.post<ReadingList>(`${this.baseUrl}/reading-lists`, { name });
+  private writeAll(all: ReadingList[]): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(all));
   }
 
-  getList(id: string): Observable<ReadingList> {
-    return this.http.get<ReadingList>(`${this.baseUrl}/reading-lists/${id}`);
+  getLists(): ReadingList[] {
+    return this.readAll();
   }
 
-  addBookToList(listId: string, bookId: string | number): Observable<void> {
-    return this.http
-      .post<void>(`${this.baseUrl}/reading-lists/${listId}/books`, { bookId })
-      .pipe(map(() => undefined));
+  createList(name: string): ReadingList {
+    const lists = this.readAll();
+    const newList: ReadingList = {
+      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
+      name,
+      bookIds: [],
+    };
+    lists.push(newList);
+    this.writeAll(lists);
+    return newList;
   }
 
-  removeBookFromList(listId: string, bookId: string | number): Observable<void> {
-    return this.http
-      .delete<void>(`${this.baseUrl}/reading-lists/${listId}/books/${bookId}`)
-      .pipe(map(() => undefined));
+  addBookToList(listId: string, bookId: string | number): void {
+    const lists = this.readAll();
+    const list = lists.find(l => l.id === listId);
+    if (!list) return;
+    if (!list.bookIds.includes(bookId)) {
+      list.bookIds.push(bookId);
+      this.writeAll(lists);
+    }
   }
 
-  deleteList(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/reading-lists/${id}`).pipe(map(() => undefined));
+  removeBookFromList(listId: string, bookId: string | number): void {
+    const lists = this.readAll();
+    const list = lists.find(l => l.id === listId);
+    if (!list) return;
+    list.bookIds = list.bookIds.filter(id => String(id) !== String(bookId));
+    this.writeAll(lists);
+  }
+
+  getListsContainingBook(bookId: string | number): ReadingList[] {
+    const lists = this.readAll();
+    return lists.filter(l => l.bookIds.some(id => String(id) === String(bookId)));
   }
 }
+
+

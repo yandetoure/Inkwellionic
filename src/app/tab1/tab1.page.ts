@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { BookService, BookSummary } from '../services/book.service';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-tab1',
@@ -7,21 +6,8 @@ import { BookService, BookSummary } from '../services/book.service';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
-export class Tab1Page implements OnInit {
-  books: BookSummary[] = [];
+export class Tab1Page {
 
-  constructor(
-    private readonly booksApi: BookService,
-  ) {}
+  constructor() {}
 
-  ngOnInit(): void {
-    this.booksApi.getBooks().subscribe((res) => (this.books = res));
-  }
-
-  getViews(b: any): number {
-    if (Array.isArray(b?.chapters)) {
-      return b.chapters.reduce((sum: number, c: any) => sum + (c?.views || 0), 0);
-    }
-    return 0;
-  }
 }

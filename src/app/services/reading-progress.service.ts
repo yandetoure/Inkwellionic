@@ -1,45 +1,50 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
-import { environment } from '../../environments/environment';
 
-export interface BookProgress {
-  chapterId?: string | number;
-  chapterNumber?: number;
-  updatedAt: number;
+interface StoredProgress {
+  [bookId: string]: {
+    chapterId: string;
+    chapterNumber?: number;
+    updatedAt: number;
+  };
 }
 
 @Injectable({ providedIn: 'root' })
 export class ReadingProgressService {
-  private readonly baseUrl = environment.apiUrl;
+  private readonly storageKey = 'readingProgress:v1';
 
-  constructor(private readonly http: HttpClient) {}
-
-  hasProgress(bookId: string | number): Observable<boolean> {
-    return this.http
-      .get<{ hasProgress: boolean }>(`${this.baseUrl}/reading-progress/${bookId}/has`)
-      .pipe(map((response) => response.hasProgress));
+  private readAll(): StoredProgress {
+    try {
+      const raw = localStorage.getItem(this.storageKey);
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
   }
 
-  getProgress(bookId: string | number): Observable<BookProgress | undefined> {
-    return this.http
-      .get<BookProgress | null>(`${this.baseUrl}/reading-progress/${bookId}`)
-      .pipe(map((progress) => progress || undefined));
+  private writeAll(all: StoredProgress): void {
+    localStorage.setItem(this.storageKey, JSON.stringify(all));
   }
 
-  setProgress(
-    bookId: string | number,
-    chapterId?: string | number,
-    chapterNumber?: number,
-  ): Observable<BookProgress> {
-    return this.http.post<BookProgress>(`${this.baseUrl}/reading-progress`, {
-      bookId,
-      chapterId,
+  getProgress(bookId: string | number): { chapterId: string; chapterNumber?: number } | null {
+    const all = this.readAll();
+    const key = String(bookId);
+    const entry = all[key];
+    return entry ? { chapterId: entry.chapterId, chapterNumber: entry.chapterNumber } : null;
+  }
+
+  hasProgress(bookId: string | number): boolean {
+    return !!this.getProgress(bookId);
+  }
+
+  setProgress(bookId: string | number, chapterId: string | number, chapterNumber?: number): void {
+    const all = this.readAll();
+    all[String(bookId)] = {
+      chapterId: String(chapterId),
       chapterNumber,
-    });
-  }
-
-  getAllProgress(): Observable<Record<string | number, BookProgress>> {
-    return this.http.get<Record<string | number, BookProgress>>(`${this.baseUrl}/reading-progress`);
+      updatedAt: Date.now(),
+    };
+    this.writeAll(all);
   }
 }
+
+

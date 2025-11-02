@@ -32,9 +32,13 @@
         <p *ngIf="b.description" style="margin-top:8px;">{{ b.description }}</p>
         <ion-badge *ngIf="b.is_paid" color="warning" style="margin-top:8px;">Payant</ion-badge>
         <ion-badge *ngIf="!b.is_paid" color="success" style="margin-top:8px;">Gratuit</ion-badge>
-        <div style="display:flex; gap:8px; margin-top:12px; align-items:center;">
-          <ion-button size="small" (click)="onReadClick()">{{ getActionLabel() }}</ion-button>
-          <ion-button size="small" fill="clear" (click)="onAddToList()">
+        
+        <div style="display:flex; gap:8px; margin-top:16px; align-items:center;">
+          <ion-button expand="block" (click)="onReadClick()">
+            <ion-icon slot="start" name="book"></ion-icon>
+            {{ getReadButtonLabel() }}
+          </ion-button>
+          <ion-button fill="outline" (click)="onAddToListClick()">
             <ion-icon slot="icon-only" name="bookmark"></ion-icon>
           </ion-button>
         </div>
